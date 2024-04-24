@@ -1,3 +1,5 @@
+# Matrix Transposition with Lists and Nested Loops:
+# This program transposes a given matrix (converts rows into columns and vice versa).
 mat = [[1,2],
        [3,4],
        [5,6]]
