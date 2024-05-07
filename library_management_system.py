@@ -71,7 +71,7 @@ def input_book_details():
 def input_borrower_name():
     return input("Enter your name: ")
 
-# Main function
+
 def main():
     library = Library()
 
