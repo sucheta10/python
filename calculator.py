@@ -1,28 +1,30 @@
-# Simple Calculator:
-# Design a simple calculator that takes three inputs from the user: two numbers, and an operator (either +, -, *, or /). Depending on the operator, perform the corresponding operation on the two numbers and print the result. If an invalid operator is entered, print an error message.
+from fastapi import FastAPI
+from pydantic import BaseModel
 
-def add(n1, n2):
-	return n1 + n2
-def sub(n1, n2):
-	return n1 - n2
-def mul(n1, n2):
-	return n1 * n2
-def div(n1, n2):
-	return n1 / n2
+app = FastAPI()
 
-print("Select:1)ADD 2)SUBTRACT 3)MULTIPLY 4)DIVIDE")
-select = int(input("Select 1, 2, 3, 4 :"))
+class Numbers(BaseModel):
+    n1: float
+    n2: float
 
-n1 = int(input("Enter first number: "))
-n2 = int(input("Enter second number: "))
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Simple Calculator API!"}
 
-if select == 1:
-	print(n1, "+", n2, "=",add(n1, n2))
-elif select == 2:
-	print(n1, "-", n2, "=",sub(n1, n2))
-elif select == 3:
-	print(n1, "*", n2, "=",mul(n1, n2))
-elif select == 4:
-	print(n1, "/", n2, "=",div(n1, n2))
-else:
-	print("Invalid choice")
+@app.post("/calculate/")
+async def calculate_numbers(numbers: Numbers, operator: str):
+    result = None
+    if operator == '+':
+        result = numbers.n1 + numbers.n2
+    elif operator == '-':
+        result = numbers.n1 - numbers.n2
+    elif operator == '*':
+        result = numbers.n1 * numbers.n2
+    elif operator == '/':
+        if numbers.n2 == 0:
+            return {"error": "Division by zero is not allowed"}
+        result = numbers.n1 / numbers.n2
+    else:
+        return {"error": "Invalid operator"}
+
+    return {"result": result}
